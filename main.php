@@ -40,6 +40,22 @@ function add_link_x( $links ) {
 }
 
 
+require 'plugin-update-checker/plugin-update-checker.php';
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/strayd0g/main-child-catalopiso/',
+	__FILE__,
+	'unique-plugin-or-theme-slug'
+);
+
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+
+//Optional: If you're using a private repository, specify the access token like this:
+$myUpdateChecker->setAuthentication('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');
+
+
+
+
 // import necessary files
 require_once WPRK_PATH . 'classes/class-create-admin-menu.php';
 require_once WPRK_PATH . 'classes/class-create-settings-routes.php';
