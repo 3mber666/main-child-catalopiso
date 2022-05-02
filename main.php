@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.0.5
+ * Version: 1.0.8
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 
@@ -44,7 +44,7 @@ require 'plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	'https://github.com/strayd0g/main-child-catalopiso/',
 	__FILE__,
-	'unique-plugin-or-theme-slug'
+	'store-code-settings'
 );
 
 //Set the branch that contains the stable release.
