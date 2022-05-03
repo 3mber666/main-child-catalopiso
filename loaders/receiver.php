@@ -1,11 +1,10 @@
 <?php
 
 /**
- * 
- * Usage = URL -> ?get&n={decode_name}&e={decode_email}&p={decode_phone}&s={decode_store}
- * Experimental 
- * 
- */
+ * Create Users [Create Wishlist] -> /set_uri?&n={name}&e={email}&p={phone_number}&s={store_code}&product=1&return=1&url={product_prefix}
+ * Return Users [For Filters, Searches and ETC only] -> /set_uri?&product=0&return=1&url={product_prefix}
+ * Return Users [Update Wishlist] -> /set_uri?&product=1&return=1&url={product_prefix}
+ * */
 
 add_action('parse_request', 'userReceiver');
 
@@ -21,32 +20,58 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 		$phone = sanitizedText($_GET['p']);
 		$store_code = sanitizedText($_GET['s']);
 		$cleanNumber = cleanPhoneNumber($phone);
+
 		$OriginalString = sanitizedText($_GET['url']);
 		$return_user = sanitizedText($_GET['return']);
-
-        // setUserData($email, $email, $phone, $store_code);
-        // wc_create_new_customer_custom($email, '', $cleanNumber, $name, $phone, $store_code);
-
+		$isProduct = sanitizedText($_GET['product']);
         $url = (explode( "/", $OriginalString));
-        
-        function get_product_by_slug($page_slug, $output = OBJECT) {
-            global $wpdb;
-                $product = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type= %s", $page_slug, 'product'));
-                if ( $product )
-                    return get_post($product, $output);
-            return null;
-        }
 
-        $product = get_product_by_slug($url[2]);
-		$getID = $_COOKIE["count"];
 
-		if($return_user == 'true') {
-			updateProjectBoard($getID, $product->ID);
-			wp_redirect( home_url( "$OriginalString" ) );
-		} else {
-			createAll($name, $cleanNumber, $email, $phone, $store_code, $product->ID);
-			wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=$OriginalString" ) );
+		if (is_user_logged_in()) {
+			setCookies('count', getProjectBoard(), 86400);
 		}
+
+		if($isProduct) {
+			$product = get_product_by_slug($url[2]);
+
+			if(!$return_user) {
+				$emailUsed = isEmailExist($email);
+
+				if($emailUsed) {
+					createProjectBoard($emailUsed, $product->ID);
+					// wp_redirect(home_url("$OriginalString"));
+				}
+
+				if(!$emailUsed) {
+					$randNumber = rand(10,100);
+					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, $product->ID);
+					// wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=$OriginalString" ) );
+				}
+			}
+
+			if($return_user) {
+				$getID = $_COOKIE["count"];
+				updateProjectBoard($getID, $product->ID);
+				wp_redirect(home_url("$OriginalString"));
+			}
+		}
+
+
+		if(!$isProduct) {
+			$emailUsed = isEmailExist($email);
+
+			if(!$return_user) {
+				if(!$emailUsed) {
+					$randNumber = rand(10,100);
+					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, '');
+					wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=$OriginalString" ) );
+				}
+			}
+			if($return_user) {
+				wp_redirect(home_url("$OriginalString"));
+			}
+		}
+
     ?>
 
 <?php

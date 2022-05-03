@@ -36,8 +36,16 @@ function isEmailInUsed($email) {
     global $wpdb;
     $user_data_table = $wpdb->prefix . "users_store_data";
     $user_count = $wpdb->get_var( "SELECT COUNT(*) FROM $user_data_table WHERE `email` = '$email'");
-    $user_count > 1 ? $UserEmailState = "Email Already in Use!" : "";
+    $UserEmailState = $user_count > 1 ? true : false;
     return $UserEmailState;
+}
+
+// Check User Exist!
+function isEmailExist($email) {
+    global $wpdb;
+    $user_data_table = $wpdb->prefix . "users";
+    $user_count = $wpdb->get_var( "SELECT id FROM $user_data_table WHERE `user_email` = '$email'");
+    return $user_count;
 }
 
 // Check Store Code State
@@ -124,7 +132,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $key = uniqid();
 
         $wpdb->insert($user_data_table, array(
-            'id' => NULL,
+            'id' => $user->id,
             'timestamp' => $date,
             'name' => $username, 
             'email' => $email, 
@@ -154,10 +162,31 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
 }
 
 
+function createProjectBoard($user_id, $product) {
+    global $wpdb;
+    $premmerce_wishlist_table = "wp_premmerce_wishlist";
+
+    $date = date('Y-m-d');
+    $key = uniqid();
+
+
+    $wpdb->insert($premmerce_wishlist_table, array(
+        'id' => NULL,
+        'user_id' => $user_id,
+        'name' => $date,
+        'wishlist_key' => $key,
+        'products' => $product,
+        'date_created' => $date,
+        'date_modified' => $date,
+        'default' => 0
+    ));
+}
+
+
 function updateProjectBoard($id, $product) {
     global $wpdb;
+    $date = date('Y-m-d');
 
-    $date = date('Y-m-d H:i:s');
     $getProducts = $wpdb->get_var( "SELECT products FROM wp_premmerce_wishlist WHERE `wishlist_key` = '$id'");
     $addProducts = $getProducts.',';
 
@@ -170,8 +199,18 @@ function updateProjectBoard($id, $product) {
       array(
          "wishlist_key" => $id
       ));
+
 }
     
+
+function getProjectBoard() {
+    global $wpdb;
+    $premmerce_wishlist_table = "wp_premmerce_wishlist";
+    $user_id = get_current_user_id();
+    $getProjects = $wpdb->get_var( "SELECT wishlist_key FROM $premmerce_wishlist_table WHERE `user_id` = '$user_id' LIMIT 50");
+    return $getProjects;
+}
+
 
 
 
@@ -326,9 +365,16 @@ function wc_create_new_customer_custom( $email, $username = '', $password = '', 
     wp_set_auth_cookie( $customer_id );
 
     return $customer_id; 
-} 
+}
 
 
+function get_product_by_slug($page_slug, $output = OBJECT) {
+    global $wpdb;
+        $product = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type= %s", $page_slug, 'product'));
+        if ( $product )
+            return get_post($product, $output);
+    return null;
+}
 
 function encodeString($str){
     for($i=0; $i<5;$i++)
