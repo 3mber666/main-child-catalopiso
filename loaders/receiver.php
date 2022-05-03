@@ -39,13 +39,13 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 
 				if($emailUsed) {
 					createProjectBoard($emailUsed, $product->ID);
-					// wp_redirect(home_url("$OriginalString"));
+					wp_redirect(home_url("$OriginalString"));
 				}
 
 				if(!$emailUsed) {
 					$randNumber = rand(10,100);
 					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, $product->ID);
-					// wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=$OriginalString" ) );
+					wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=$OriginalString" ) );
 				}
 			}
 
