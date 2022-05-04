@@ -190,6 +190,9 @@ function createProjectBoard($user_id, $product) {
         array(
            "id" => $user_id
         ));
+
+    setCookies('count', $key, 3600);
+    
 }
 
 
