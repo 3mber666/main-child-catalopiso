@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Create Users [Create Wishlist] -> /set_uri?&n={name}&e={email}&p={phone_number}&s={store_code}&product=1&return=1&url={product_prefix}
+ * Create Users [Create Wishlist] -> /set_uri?&n={name}&e={email}&p={phone_number}&s={store_code}&product=1&url={product_prefix}
  * Return Users [For Filters, Searches and ETC only] -> /set_uri?&product=0&return=1&url={product_prefix}
- * Return Users [Update Wishlist] -> /set_uri?&product=1&return=1&url={product_prefix}
+ * Return Users [Update Wishlist] -> 	
  * */
 
 add_action('parse_request', 'userReceiver');
@@ -28,7 +28,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 
 
 		if (is_user_logged_in()) {
-			setCookies('count', getProjectBoard(), 86400);
+			setCookies('count', getProjectBoard(), 3600);
 		}
 
 		if($isProduct) {
@@ -56,7 +56,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 			}
 		}
 
-
+		
 		if(!$isProduct) {
 			$emailUsed = isEmailExist($email);
 

@@ -70,8 +70,8 @@ if(isset($_POST['submit'])) {
    
 
     // Set cookies for redirection [verified_user, url] [24 hours interval]
-    setCookies('verified_user', $sanitizedStoreCode, 86400);
-    setCookies('catalopiso_url', $get_url_from_db, 86400);
+    setCookies('verified_user', $sanitizedStoreCode, 3600);
+    setCookies('catalopiso_url', $get_url_from_db, 3600);
 
     $encode_name = encodeString($sanitizedName);
     $encode_email = encodeString($sanitizedEmail);

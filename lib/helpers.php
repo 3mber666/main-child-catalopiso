@@ -75,7 +75,7 @@ function storeCodeState($code){
 function setCookies($name, $value, $expiration){
     $cookie_name = "verified";
     $cookie_value = $sanitizedStoreCode;
-    setcookie($name, $value, time() + ($expiration * 30), "/");
+    setcookie($name, $value, time() + ($expiration * 24), "/");
 }
 
 
@@ -144,7 +144,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         // wp_premmerce_wishlist(user_id, name, wishlist_key, products, date_modified, date_created)
 
 
-        setCookies('count', $key, 86400);
+        setCookies('count', $key, 3600);
 
         $wpdb->insert($premmerce_wishlist_table, array(
             'id' => NULL,
@@ -165,8 +165,10 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
 function createProjectBoard($user_id, $product) {
     global $wpdb;
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
-
+    $user_data_table = $wpdb->prefix . "users_store_data";
+    
     $date = date('Y-m-d');
+    $date_1 = date('Y-m-d H:i:s');
     $key = uniqid();
 
 
@@ -176,10 +178,18 @@ function createProjectBoard($user_id, $product) {
         'name' => $date,
         'wishlist_key' => $key,
         'products' => $product,
-        'date_created' => $date,
-        'date_modified' => $date,
+        'date_created' => $date_1,
+        'date_modified' => $date_1,
         'default' => 0
     ));
+
+    $wpdb->update($user_data_table, array( 
+        'key' => $key,
+        'timestamp' => $date_1
+        ), 
+        array(
+           "id" => $user_id
+        ));
 }
 
 
