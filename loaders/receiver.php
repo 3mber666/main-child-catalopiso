@@ -52,7 +52,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 			if($return_user) {
 					$getID = $_COOKIE["count"];
 					updateProjectBoard($getID, $product->ID);
-					wp_redirect(home_url("$OriginalString"));
+					wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
 				}
 			}
 
@@ -68,7 +68,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 				}
 			}
 			if($return_user) {
-				wp_redirect(home_url("$OriginalString"));
+				wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
 			}
 		}
 
