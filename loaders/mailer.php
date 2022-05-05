@@ -6,6 +6,7 @@
  *  Send_emails_interval 24 hours
  * 
  */
+ob_start();
 
 add_filter('cron_schedules', 'add_automailer');
 function add_automailer($schedules) {
@@ -47,5 +48,6 @@ function add_automailer($schedules) {
             wp_mail($geturldata->email, 'Today Project Board', $body);
         }
     }
-
+    
+    ob_end_flush();
 ?>
