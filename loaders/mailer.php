@@ -43,8 +43,8 @@ function add_automailer($schedules) {
             ON $user_data.store_code=$store_data.store_code WHERE timestamp BETWEEN CURDATE() - INTERVAL 1 DAY AND CURDATE() - INTERVAL 1 SECOND");
         
         foreach ($get_user_x as $geturldata ) {
-            $body = "Your Project Board $geturldata->store_url/$geturldata->key";
-            wp_mail($geturldata->email, 'Sample Data', $body);
+            $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
+            wp_mail($geturldata->email, 'Today Project Board', $body);
         }
     }
 

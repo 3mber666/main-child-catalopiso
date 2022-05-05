@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.1.5
+ * Version: 1.1.6
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 
@@ -59,7 +59,7 @@ $myUpdateChecker->setAuthentication('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');
 // import necessary files
 require_once WPRK_PATH . 'classes/class-create-admin-menu.php';
 require_once WPRK_PATH . 'classes/class-create-settings-routes.php';
-// require_once WPRK_PATH . 'loaders/qrcode-gateway.php';
 require_once WPRK_PATH . 'loaders/receiver.php';
+require_once WPRK_PATH . 'loaders/mailer.php';
 require_once WPRK_PATH . 'loaders/install.php';
 require_once WPRK_PATH . 'lib/helpers.php';
