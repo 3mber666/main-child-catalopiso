@@ -30,6 +30,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 		}
 
 		if($isProduct) {
+
 			$product = get_product_by_slug($url[2]);
 
 			if(!$return_user) {
@@ -37,20 +38,20 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 
 				if($emailUsed) {
 					createProjectBoard($emailUsed, $product->ID);
-					wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=/$OriginalString$OriginalString"));
+					wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
 				}
 
 				if(!$emailUsed) {
 					$randNumber = rand(10,100);
 					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, $product->ID);
-					wp_redirect( home_url( "/?password_protected_pwd=$store_code&redirect_to=/$OriginalString" ) );
+					wp_redirect( home_url( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
 				}
 			}
 
 			if($return_user) {
 					$getID = $_COOKIE["count"];
 					updateProjectBoard($getID, $product->ID);
-					wp_redirect(home_url("/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=/$OriginalString"));
+					wp_redirect(home_url("$OriginalString"));
 				}
 			}
 
@@ -60,11 +61,11 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 
 			if(!$return_user) {
 				if(!$emailUsed) {
-					wp_redirect( home_url( "/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=/$OriginalString" ) );
+					wp_redirect( home_url ( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
 				}
 			}
 			if($return_user) {
-					wp_redirect(home_url("/?password_protected_pwd=$store_code&wp-submit&password_protected_cookie_test=1&redirect_to=/$OriginalString"));
+					wp_redirect( home_url ( "$OriginalString" ) );
 			}
 		}
 

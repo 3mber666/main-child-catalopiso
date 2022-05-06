@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.2.1
+ * Version: 1.2.2
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 

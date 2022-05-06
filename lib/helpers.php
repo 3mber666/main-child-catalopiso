@@ -200,11 +200,11 @@ function updateProjectBoard($id, $product) {
     global $wpdb;
     $date = date('Y-m-d');
 
+    $getExistProduct = $wpdb->get_var( "SELECT products FROM `wp_premmerce_wishlist` WHERE `wishlist_key` = '$id' AND `products` = '$product'");
     $getProducts = $wpdb->get_var( "SELECT products FROM wp_premmerce_wishlist WHERE `wishlist_key` = '$id'");
     $addProducts = $getProducts.',';
 
-    // $wpdb->query($wpdb->prepare("UPDATE wp_premmerce_wishlist SET name = 'test' WHERE id = 81"));
-
+    if(!$getExistProduct) {
     $wpdb->update('wp_premmerce_wishlist', array( 
       'products' => $addProducts.$product,
       'date_modified' => $date
@@ -212,6 +212,7 @@ function updateProjectBoard($id, $product) {
       array(
          "wishlist_key" => $id
       ));
+    }
 
 }
     
