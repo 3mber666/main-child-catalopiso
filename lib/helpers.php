@@ -200,10 +200,11 @@ function updateProjectBoard($id, $product) {
     global $wpdb;
     $date = date('Y-m-d');
 
-    $getExistProduct = $wpdb->get_var( "SELECT products FROM `wp_premmerce_wishlist` WHERE `wishlist_key` = '$id' AND `products` = '$product'");
+    $getExistProduct = $wpdb->get_var( "SELECT products FROM `wp_premmerce_wishlist` WHERE `wishlist_key` = '$id' AND `products` LIKE '%$product%'");
     
-    // Check if product exist in specific project board
-    $getProducts = $wpdb->get_var( "SELECT products FROM `wp_premmerce_wishlist` WHERE `wishlist_key` = '$id' AND `products` LIKE '%$product%'");
+    // Check if product exist in specific project
+
+    $getProducts = $wpdb->get_var( "SELECT products FROM wp_premmerce_wishlist WHERE `wishlist_key` = '$id'");
     $addProducts = $getProducts.',';
 
     if(!$getExistProduct) {
