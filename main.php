@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.1.9
+ * Version: 1.2.1
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 
@@ -52,8 +52,6 @@ $myUpdateChecker->setBranch('main');
 
 // Optional: If you're using a private repository, specify the access token like this:
 $myUpdateChecker->setAuthentication('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');
-
-
 
 
 // import necessary files
