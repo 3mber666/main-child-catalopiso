@@ -6,7 +6,6 @@
  *  Send_emails_interval 24 hours
  * 
  */
-ob_start();
 
 add_filter('cron_schedules', 'add_automailer');
 function add_automailer($schedules) {
@@ -45,9 +44,6 @@ function add_automailer($schedules) {
         
         foreach ($get_user_x as $geturldata ) {
             $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
-            wp_mail($geturldata->email, 'Today Project Board', $body);
+            wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
         }
     }
-    
-    ob_end_flush();
-?>

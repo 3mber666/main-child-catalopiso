@@ -157,12 +157,20 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
             'default' => 0
         ));
 
+        $site_url = site_url();
+        $confirm_url = "{$site_url}/project-boards/?key={$key}";
+
+        // Send a verification e-mail to the user to confirm publication
+        $subject = "Today Project Board";
+        $body = 'Here\'s the link of your project board for this day -> '.$confirm_url;
+        wp_mail($email, $subject, $body );
+
     }
 
 }
 
 
-function createProjectBoard($user_id, $product) {
+function createProjectBoard($user_id, $email, $product) {
     global $wpdb;
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
     $user_data_table = $wpdb->prefix . "users_store_data";
@@ -191,8 +199,16 @@ function createProjectBoard($user_id, $product) {
            "id" => $user_id
         ));
 
+    $site_url = site_url();
+    $confirm_url = "{$site_url}/project-boards/?key={$key}";
+
+    // Send a verification e-mail to the user to confirm publication
+    $subject = "Today Project Board";
+    $body = 'Here\'s the link of your project board for this day -> '.$confirm_url;
+    wp_mail($email, $subject, $body );
+
     setCookies('count', $key, 3600);
-    
+
 }
 
 
