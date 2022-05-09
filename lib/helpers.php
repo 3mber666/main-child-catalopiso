@@ -129,6 +129,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $premmerce_wishlist_table = "wp_premmerce_wishlist";
 
         $date = date('Y-m-d H:i:s');
+        $date_1 = date('Y-m-d');
         $key = uniqid();
 
         $wpdb->insert($user_data_table, array(
@@ -149,7 +150,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $wpdb->insert($premmerce_wishlist_table, array(
             'id' => NULL,
             'user_id' => $user->id,
-            'name' => $username,
+            'name' => $date_1,
             'wishlist_key' => $key,
             'products' => $product,
             'date_created' => $date,
@@ -170,6 +171,12 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
 }
 
 
+function getWishlistLatest($user_id){
+    $getWishlistExist = $wpdb->get_var( "SELECT wishlist_key from `wp_premmerce_wishlist` WHERE `date_created` >= NOW() - INTERVAL 1 DAY AND user_id = $user_id");
+    return $getWishlistExist;
+}
+
+
 function createProjectBoard($user_id, $email, $product) {
     global $wpdb;
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
@@ -179,7 +186,9 @@ function createProjectBoard($user_id, $email, $product) {
     $date_1 = date('Y-m-d H:i:s');
     $key = uniqid();
 
+    $getWishlistExist = $wpdb->get_var( "SELECT wishlist_key from `wp_premmerce_wishlist` WHERE `date_created` >= NOW() - INTERVAL 1 DAY AND user_id = $user_id");
 
+    if($getWishlistExist) {
     $wpdb->insert($premmerce_wishlist_table, array(
         'id' => NULL,
         'user_id' => $user_id,
@@ -208,6 +217,7 @@ function createProjectBoard($user_id, $email, $product) {
     wp_mail($email, $subject, $body );
 
     setCookies('count', $key, 3600);
+    }
 
 }
 

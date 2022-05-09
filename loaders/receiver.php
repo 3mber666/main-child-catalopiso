@@ -49,7 +49,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 			}
 
 			if($return_user) {
-					$getID = $_COOKIE["count"];
+					$getID = getWishlistLatest($emailUsed);
 					updateProjectBoard($getID, $product->ID);
 					wp_redirect(home_url("$OriginalString"));
 				}
