@@ -37,8 +37,11 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 				$emailUsed = isEmailExist($email);
 
 				if($emailUsed) {
-					createProjectBoard($emailUsed, $email, $product->ID);
-					wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
+					$getID = getWishlistLatest($emailUsed);
+					if(!$getID) {
+						createProjectBoard($emailUsed, $email, $product->ID);
+						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
+					}
 				}
 
 				if(!$emailUsed) {
