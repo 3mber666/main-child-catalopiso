@@ -170,15 +170,9 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
 
 }
 
-
-function getWishlistLatest($user_id){
-    $getWishlistExist = $wpdb->get_var( "SELECT wishlist_key from `wp_premmerce_wishlist` WHERE `date_created` >= NOW() - INTERVAL 1 DAY AND user_id = $user_id");
-    return $getWishlistExist;
-}
-
-
 function createProjectBoard($user_id, $email, $product) {
     global $wpdb;
+
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
     $user_data_table = $wpdb->prefix . "users_store_data";
     
@@ -186,9 +180,6 @@ function createProjectBoard($user_id, $email, $product) {
     $date_1 = date('Y-m-d H:i:s');
     $key = uniqid();
 
-    $getWishlistExist = $wpdb->get_var( "SELECT wishlist_key from `wp_premmerce_wishlist` WHERE `date_created` >= NOW() - INTERVAL 1 DAY AND user_id = $user_id");
-
-    if($getWishlistExist) {
     $wpdb->insert($premmerce_wishlist_table, array(
         'id' => NULL,
         'user_id' => $user_id,
@@ -217,8 +208,6 @@ function createProjectBoard($user_id, $email, $product) {
     wp_mail($email, $subject, $body );
 
     setCookies('count', $key, 3600);
-    }
-
 }
 
 
@@ -246,11 +235,19 @@ function updateProjectBoard($id, $product) {
 }
     
 
-function getProjectBoard() {
+function getProjectBoard($email) {
+
     global $wpdb;
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
-    $user_id = get_current_user_id();
-    $getProjects = $wpdb->get_var( "SELECT wishlist_key FROM $premmerce_wishlist_table WHERE `user_id` = '$user_id' LIMIT 50");
+    $user_data_table = "wp_users_store_data";
+    
+    $getProjects = $wpdb->get_var( "SELECT wishlist_key 
+    FROM $premmerce_wishlist_table
+    INNER JOIN $user_data_table
+    ON $user_data_table.id=$premmerce_wishlist_table.user_id
+    WHERE `email` = '$email' 
+    AND `date_created` >= NOW() - INTERVAL 1 DAY");
+
     return $getProjects;
 }
 
