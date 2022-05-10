@@ -1,5 +1,5 @@
 === WP Store [Catalopiso Child Stores] ===
-Requires at least: 1.2.9
+Requires at least: 1.2.10
 Tested up to: 7.3.5
 Requires PHP: 5.2
 Stable tag: main
