@@ -11,7 +11,7 @@ add_filter('cron_schedules', 'add_automailer');
 
 function add_automailer($schedules) {
     $schedules['send_emails_interval'] = array(
-        'interval' => 60*60*24, // Settings up interval [Current: 24 hours]
+        'interval' => 300, // Settings up interval [Current: 24 hours]
         'display' => __('Every 24hrs'),
     );
         return $schedules;
@@ -44,7 +44,9 @@ function add_automailer($schedules) {
             ON $user_data.store_code=$store_data.store_code WHERE timestamp BETWEEN CURDATE() - INTERVAL 1 DAY AND CURDATE() - INTERVAL 1 SECOND");
         
         foreach ($get_user_x as $geturldata ) {
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
             $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
-            wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+            wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body, $headers);
         }
     }
