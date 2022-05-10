@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.3.3
+ * Version: 1.3.4
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 
@@ -39,9 +39,9 @@ function add_link_x( $links ) {
 	return $links;
 }
 
-// add_action( 'init', 'schedule_my_cron' );
-// add_action( 'my_5min_event', 'fivemin_schedule_hook' );
-// add_filter( 'cron_schedules','my_cron_schedules' );
+add_action( 'init', 'schedule_my_cron' );
+add_action( 'my_5min_event', 'fivemin_schedule_hook' );
+add_filter( 'cron_schedules','my_cron_schedules' );
 
 
 require 'plugin-update-checker/plugin-update-checker.php';
@@ -62,6 +62,6 @@ $myUpdateChecker->setAuthentication('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');
 require_once WPRK_PATH . 'classes/class-create-admin-menu.php';
 require_once WPRK_PATH . 'classes/class-create-settings-routes.php';
 require_once WPRK_PATH . 'loaders/receiver.php';
-require_once WPRK_PATH . 'loaders/mailer.php';
+// require_once WPRK_PATH . 'loaders/mailer.php';
 require_once WPRK_PATH . 'loaders/install.php';
 require_once WPRK_PATH . 'lib/helpers.php';

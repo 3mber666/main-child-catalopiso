@@ -425,5 +425,47 @@ function encodeString($str){
   }
 
 
+function my_cron_schedules($schedules){
+    if(!isset($schedules["5min"])){
+        $schedules["5min"] = array(
+            'interval' => 5*60,
+            'display' => __('Once every 5 minutes'));
+    }
+    if(!isset($schedules["30min"])){
+        $schedules["30min"] = array(
+            'interval' => 30*60,
+            'display' => __('Once every 30 minutes'));
+    }
+    return $schedules;
+}
+
+function schedule_my_cron(){
+    // Schedules the event if it's NOT already scheduled.
+    if ( ! wp_next_scheduled ( 'my_5min_event' ) ) {
+        wp_schedule_event( time(), '5min', 'my_5min_event' );
+    }
+}
+
+function fivemin_schedule_hook() {
+    global $wpdb;
+        $user_data = $wpdb->prefix . "users_store_data";
+        $store_data = $wpdb->prefix . "store_codes";
+        
+        $get_user_x = $wpdb->get_results( "SELECT $user_data.timestamp,
+            $user_data.email,
+            $user_data.name,
+            $user_data.phone,
+            $user_data.key,
+            $user_data.store_code,
+            $store_data.store_url
+            FROM $user_data
+            INNER JOIN $store_data
+            ON $user_data.store_code=$store_data.store_code WHERE DATE(timestamp) = CURRENT_DATE()-1");
+        
+        foreach ($get_user_x as $geturldata ) {
+            $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
+            wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+        }
+}
 
 ?>
