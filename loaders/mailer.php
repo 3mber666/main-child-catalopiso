@@ -8,6 +8,7 @@
  */
 
 add_filter('cron_schedules', 'add_automailer');
+
 function add_automailer($schedules) {
     $schedules['send_emails_interval'] = array(
         'interval' => 60*60*24, // Settings up interval [Current: 24 hours]
