@@ -150,22 +150,13 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $wpdb->insert($premmerce_wishlist_table, array(
             'id' => NULL,
             'user_id' => $user->id,
-            'name' => 'Sample Search'.$date_1,
+            'name' => 'Sample Search '.$date_1,
             'wishlist_key' => $key,
             'products' => $product,
             'date_created' => $date,
             'date_modified' => $date,
             'default' => 0
         ));
-
-        $site_url = site_url();
-        $confirm_url = "{$site_url}/project-boards/?key={$key}";
-
-        // Send a verification e-mail to the user to confirm publication
-        $subject = "Today Project Board";
-        $body = 'Here\'s the link of your project board for this day -> '.$confirm_url;
-        wp_mail($email, $subject, $body );
-
     }
 
 }
