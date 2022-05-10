@@ -61,20 +61,12 @@ function my_cron_schedules($schedules){
     return $schedules;
 }
 
-add_filter('cron_schedules','my_cron_schedules');
-
 function schedule_my_cron(){
     // Schedules the event if it's NOT already scheduled.
     if ( ! wp_next_scheduled ( 'my_5min_event' ) ) {
         wp_schedule_event( time(), '5min', 'my_5min_event' );
     }
 }
-
-// Registers and schedules the my_5min_event cron event.
-add_action( 'init', 'schedule_my_cron' );
-
-// Runs fivemin_schedule_hook() function every 5 minutes.
-add_action( 'my_5min_event', 'fivemin_schedule_hook' );
 
 
 function fivemin_schedule_hook() {
