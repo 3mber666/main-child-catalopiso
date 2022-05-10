@@ -150,7 +150,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $wpdb->insert($premmerce_wishlist_table, array(
             'id' => NULL,
             'user_id' => $user->id,
-            'name' => $date_1,
+            'name' => 'Sample Search'.$date_1,
             'wishlist_key' => $key,
             'products' => $product,
             'date_created' => $date,
@@ -183,7 +183,7 @@ function createProjectBoard($user_id, $email, $product) {
     $wpdb->insert($premmerce_wishlist_table, array(
         'id' => NULL,
         'user_id' => $user_id,
-        'name' => $date,
+        'name' => 'Sample Search'.$date,
         'wishlist_key' => $key,
         'products' => $product,
         'date_created' => $date_1,

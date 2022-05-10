@@ -61,6 +61,8 @@ function my_cron_schedules($schedules){
     return $schedules;
 }
 
+add_filter('cron_schedules','my_cron_schedules');
+
 function schedule_my_cron(){
     // Schedules the event if it's NOT already scheduled.
     if ( ! wp_next_scheduled ( 'my_5min_event' ) ) {
@@ -68,14 +70,33 @@ function schedule_my_cron(){
     }
 }
 
+// Registers and schedules the my_5min_event cron event.
+add_action( 'init', 'schedule_my_cron' );
+
+// Runs fivemin_schedule_hook() function every 5 minutes.
+add_action( 'my_5min_event', 'fivemin_schedule_hook' );
+
 
 function fivemin_schedule_hook() {
-    $to = 'nochvur@frederictonlawyer.com';
-    $subject = 'The subject';
-    $body = 'The email body content';
-    $headers = array('Content-Type: text/html; charset=UTF-8','From: My Site Name <support@example.com>');
-    
-    wp_mail( $to, $subject, $body, $headers );
+    global $wpdb;
+        $user_data = $wpdb->prefix . "users_store_data";
+        $store_data = $wpdb->prefix . "store_codes";
+        
+        $get_user_x = $wpdb->get_results( "SELECT $user_data.timestamp,
+            $user_data.email,
+            $user_data.name,
+            $user_data.phone,
+            $user_data.key,
+            $user_data.store_code,
+            $store_data.store_url
+            FROM $user_data
+            INNER JOIN $store_data
+            ON $user_data.store_code=$store_data.store_code WHERE DATE(timestamp) = CURRENT_DATE()-1");
+        
+        foreach ($get_user_x as $geturldata ) {
+            $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
+            wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+        }
 }
 
 ?>
