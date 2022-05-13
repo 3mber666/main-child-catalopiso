@@ -1,7 +1,6 @@
 <?php
 
 add_action('parse_request', 'todaysCustomer');
-
 function todaysCustomer() {
 
 $request_uri_string = $_SERVER['REQUEST_URI'];

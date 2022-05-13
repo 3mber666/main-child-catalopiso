@@ -26,7 +26,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
         $url = (explode( "/", $OriginalString));
 		
 		setCookies('count', getProjectBoard($email), 3600);
-		
+
 		if($isProduct) {
 
 			$product = get_product_by_slug($url[2]);
@@ -41,11 +41,11 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 					}
 
 					if(getProjectBoard($email)) {
-						$x = $_COOKIE["count"];
+						$x = getProjectBoard($email);
 						updateProjectBoard($x, $product->ID);
 						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
 					}
-					
+
 				}
 
 				if(!$emailUsed) {
@@ -56,7 +56,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 			}
 
 			if($return_user) {
-					$x = $_COOKIE["count"];
+					$x = getProjectBoard($email);
 					updateProjectBoard($x, $product->ID);
 					wp_redirect(home_url("$OriginalString"));
 				}
