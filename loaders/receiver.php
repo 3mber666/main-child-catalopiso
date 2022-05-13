@@ -39,12 +39,19 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 						createProjectBoard($emailUsed, $email, $product->ID);
 						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
 					}
+
+					if(getProjectBoard($email)) {
+						$x = $_COOKIE["count"];
+						updateProjectBoard($x, $product->ID);
+						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
+					}
+					
 				}
 
 				if(!$emailUsed) {
 					$randNumber = rand(10,100);
 					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, $product->ID);
-						wp_redirect( home_url( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
+					wp_redirect( home_url( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
 				}
 			}
 
