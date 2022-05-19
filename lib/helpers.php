@@ -158,8 +158,8 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
             'default' => 0
         ));
 
-        wp_set_current_user( $customer_id );
-        wp_set_auth_cookie( $customer_id );
+        wp_set_current_user( $user->id );
+        wp_set_auth_cookie( $user->id );
     }
 
 }
