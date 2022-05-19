@@ -194,6 +194,8 @@ function createProjectBoard($user_id, $email, $product) {
     ));
 
     setCookies('count', $key, 3600);
+    wp_set_current_user( $user_id );
+    wp_set_auth_cookie( $user_id );
 }
 
 
