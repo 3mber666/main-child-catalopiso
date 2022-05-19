@@ -23,10 +23,12 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 		$OriginalString = sanitizedText($_GET['url']);
 		$return_user = sanitizedText($_GET['return']);
 		$isProduct = sanitizedText($_GET['product']);
-        $url = (explode( "/", $OriginalString));
+        	$url = (explode( "/", $OriginalString));
 		
-		setCookies('count', getProjectBoard($email), 3600);
-
+	    	if(!$_COOKIE["count"]) {
+			setCookies('count', getProjectBoard($email), 3600);
+	    	}
+	    
 		if($isProduct) {
 
 			$product = get_product_by_slug($url[2]);
@@ -37,13 +39,13 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 				if($emailUsed) {
 					if(!getProjectBoard($email)) {
 						createProjectBoard($emailUsed, $email, $product->ID);
-						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
+						wp_redirect(home_url("$OriginalString"));
 					}
 
 					if(getProjectBoard($email)) {
 						$x = getProjectBoard($email);
 						updateProjectBoard($x, $product->ID);
-						wp_redirect(home_url("/?password_protected_pwd=$store_code&redirect_to=$OriginalString"));
+						wp_redirect(home_url("$OriginalString"));
 					}
 
 				}
@@ -51,7 +53,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 				if(!$emailUsed) {
 					$randNumber = rand(10,100);
 					createAll($name.$randNumber, $cleanNumber, $email, $phone, $store_code, $product->ID);
-					wp_redirect( home_url( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
+					wp_redirect( home_url( "$OriginalString" ) );
 				}
 			}
 
@@ -68,7 +70,7 @@ $request_uri_string = $_SERVER['REQUEST_URI'];
 
 			if(!$return_user) {
 				if(!$emailUsed) {
-					wp_redirect( home_url ( "/?password_protected_pwd=$store_code&redirect_to=$OriginalString" ) );
+					wp_redirect( home_url ( "$OriginalString" ) );
 				}
 			}
 			if($return_user) {
