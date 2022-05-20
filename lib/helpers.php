@@ -230,7 +230,7 @@ function getUsersYesterday() {
 
 function updateProjectBoard($id, $product) {
     global $wpdb;
-    $date = date('Y-m-d');
+    $date_1 = date('Y-m-d H:i:s');
 
     // Check if Product Exist
     $getExistProduct = $wpdb->get_var( "SELECT products FROM `wp_premmerce_wishlist` WHERE `wishlist_key` = '$id' AND `products` LIKE '%$product%'");
@@ -241,7 +241,7 @@ function updateProjectBoard($id, $product) {
     if(!$getExistProduct) {
     $wpdb->update('wp_premmerce_wishlist', array( 
         'products' => $addProducts.$product,
-        'date_modified' => $date
+        'date_modified' => $date_1
       ), 
       array(
          'wishlist_key' => $id
@@ -338,7 +338,7 @@ function my_cron_schedules($schedules){
 function schedule_my_cron(){
     // Schedules the event if it's NOT already scheduled.
     if ( ! wp_next_scheduled ( 'my_5min_event' ) ) {
-        wp_schedule_event( time(), '30min', 'my_5min_event' );
+        wp_schedule_event( time(), '5min', 'my_5min_event' );
     }
 }
 
@@ -346,27 +346,42 @@ function fivemin_schedule_hook() {
 
     global $wpdb;
     
+
     $user_data_table = $wpdb->prefix . "users_store_data";
     $store_data_table = $wpdb->prefix . "store_codes";
+    $project_board_table = "wp_premmerce_wishlist";
 
-    
     $get_user_x = $wpdb->get_results ("SELECT $user_data_table.id, 
     $user_data_table.timestamp, 
     $user_data_table.name, 
     $user_data_table.email, 
     $user_data_table.name, 
     $user_data_table.phone, 
-    $user_data_table.key, 
+    $user_data_table.key,
+    $project_board_table.date_modified, 
+    $project_board_table.default, 
     $user_data_table.store_code,
     $store_data_table.store_url
-    FROM $user_data_table
+    FROM $store_data_table
     INNER JOIN $store_data_table
-    ON $user_data_table.store_code=$store_data_table.store_code WHERE DATE(timestamp) = CURRENT_DATE()-1");
+    INNER JOIN $project_board_table
+    ON $user_data_table.store_code=$store_data_table.store_code WHERE $project_board_table.date_modified < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND date_modified >= now() - INTERVAL 1 DAY AND $project_board_table.default = '0'");
 
     foreach ($get_user_x as $geturldata ) {
+
         $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
-        wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+        $mail = wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+
+        if($mail) {
+            $wpdb->update($project_board_table, array(
+                'default' => 1
+                ), 
+                array(
+                   "id" => $geturldata->id
+            ));
+        }
     }
+
 }
 
 ?>
