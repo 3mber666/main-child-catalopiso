@@ -321,32 +321,28 @@ function get_product_by_slug($page_slug, $output = OBJECT) {
     return null;
 }
 
-function my_cron_schedules($schedules){
-    if(!isset($schedules["5min"])){
-        $schedules["5min"] = array(
-            'interval' => 5*60,
-            'display' => __('Once every 5 minutes'));
+function custom_cron_schedule( $schedules ) {
+    if(!isset($schedules['5min'])){
+      $schedules['5min'] = array(
+        'interval' => 5 * MINUTE_IN_SECONDS,
+        'display' => __('Once every 5 minutes'));
     }
-    if(!isset($schedules["30min"])){
-        $schedules["30min"] = array(
-            'interval' => 30*60,
-            'display' => __('Once every 30 minutes'));
+    if(!isset($schedules['20min'])){
+      $schedules['20min'] = array(
+        'interval' => 20 * MINUTE_IN_SECONDS,
+        'display' => __('Once every 20 minutes'));
     }
     return $schedules;
+ }
+
+if (!wp_next_scheduled('name_your_cron')) {
+   wp_schedule_event( time(), '5min', 'name_your_cron' );
 }
 
-function schedule_my_cron(){
-    // Schedules the event if it's NOT already scheduled.
-    if ( ! wp_next_scheduled ( 'my_5min_event' ) ) {
-        wp_schedule_event( time(), '5min', 'my_5min_event' );
-    }
-}
-
-function fivemin_schedule_hook() {
-
+function my_schedule_hook() {
+	
     global $wpdb;
-    
-
+	
     $user_data_table = $wpdb->prefix . "users_store_data";
     $store_data_table = $wpdb->prefix . "store_codes";
     $project_board_table = "wp_premmerce_wishlist";
@@ -362,26 +358,25 @@ function fivemin_schedule_hook() {
     $project_board_table.default, 
     $user_data_table.store_code,
     $store_data_table.store_url
-    FROM $store_data_table
+    FROM $user_data_table
     INNER JOIN $store_data_table
     INNER JOIN $project_board_table
-    ON $user_data_table.store_code=$store_data_table.store_code WHERE $project_board_table.date_modified < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND date_modified >= now() - INTERVAL 1 DAY AND $project_board_table.default = '0'");
+    ON $user_data_table.store_code=$store_data_table.store_code WHERE $project_board_table.date_modified < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND $project_board_table.date_modified >= now() - INTERVAL 1 DAY AND $project_board_table.default = '0'");
 
     foreach ($get_user_x as $geturldata ) {
 
-        $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
-        $mail = wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
-
-        if($mail) {
-            $wpdb->update($project_board_table, array(
-                'default' => 1
-                ), 
-                array(
-                   "id" => $geturldata->id
-            ));
+    $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
+    $mail = wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
+    
+    if($mail) {
+        $wpdb->update('wp_premmerce_wishlist', array( 
+            'default' => 1
+        ), 
+        array(
+            'wishlist_key' => $geturldata->key
+        ));
         }
     }
-
+    
 }
-
 ?>
