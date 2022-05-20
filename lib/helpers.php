@@ -361,11 +361,11 @@ function my_schedule_hook() {
     FROM $user_data_table
     INNER JOIN $store_data_table
     INNER JOIN $project_board_table
-    ON $user_data_table.store_code=$store_data_table.store_code WHERE $project_board_table.date_modified < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND $project_board_table.date_modified >= now() - INTERVAL 1 DAY AND $project_board_table.default = '0'");
+    ON $user_data_table.store_code=$store_data_table.store_code WHERE $project_board_table.date_modified < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND $project_board_table.default = '0'");
 
     foreach ($get_user_x as $geturldata ) {
 
-    $body = "Your Project Board $geturldata->store_url/?password_protected_pwd=$geturldata->store_code&redirect_to=/project-boards/?key=$geturldata->key";
+    $body = "Your Project Board $geturldata->store_url/project-boards/?key=$geturldata->key&code=letmein";
     $mail = wp_mail($geturldata->email, 'Here\'s the link of your project board for this day', $body);
     
     if($mail) {
@@ -377,6 +377,5 @@ function my_schedule_hook() {
         ));
         }
     }
-    
 }
 ?>
