@@ -5,7 +5,7 @@
  * Plugin URI: https://tugasvirtualsolutions.com/
  * Author: Tugas Virtual Solutions
  * Author URI: https://tugasvirtualsolutions.com/
- * Version: 1.3.15
+ * Version: 1.4.1
  * Description: A plug-in that can add stores, generate QR and QR page router.
  * Text-Domain: tugasvirtualsolution.com
  * 
@@ -47,8 +47,8 @@ $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	'store-code-settings'
 );
 
-add_filter( 'cron_schedules', 'custom_cron_schedule' );
-add_action( 'name_your_cron', 'my_schedule_hook' );
+// add_filter( 'cron_schedules', 'custom_cron_schedule' );
+// add_action( 'name_your_cron', 'my_schedule_hook' );
 
 //Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');

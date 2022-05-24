@@ -31,20 +31,28 @@ function sanitizedText($data) {
     return $data;
 }
 
-// Check User Email State
-function isEmailInUsed($email) {
-    global $wpdb;
-    $user_data_table = $wpdb->prefix . "users_store_data";
-    $user_count = $wpdb->get_var( "SELECT COUNT(*) FROM $user_data_table WHERE `email` = '$email'");
-    $UserEmailState = $user_count > 1 ? true : false;
-    return $UserEmailState;
-}
-
 // Check User Exist!
 function isEmailExist($email) {
     global $wpdb;
+    $date = date('Y-m-d H:i:s');
+
     $user_data_table = $wpdb->prefix . "users";
+    $store_user_data = $wpdb->prefix . "users_store_data";
     $user_count = $wpdb->get_var( "SELECT id FROM $user_data_table WHERE `user_email` = '$email'");
+
+    if($user_count) {
+    wp_set_current_user( $user_count );
+    wp_set_auth_cookie( $user_count );
+
+    $wpdb->update($store_user_data, array(
+        'timestamp' => $date
+        ), 
+        array(
+           "id" => $user_count
+    ));
+
+    }
+
     return $user_count;
 }
 
@@ -194,18 +202,16 @@ function createProjectBoard($user_id, $email, $product) {
     ));
 
     setCookies('count', $key, 3600);
-    wp_set_current_user( $user_id );
-    wp_set_auth_cookie( $user_id );
+
 }
 
 
 
 function getUsersYesterday() {
+
     global $wpdb;
     $user_data_table = $wpdb->prefix . "users_store_data";
     $store_data_table = $wpdb->prefix . "store_codes";
-
-    
     $query = "SELECT  $user_data_table.id, 
     $user_data_table.timestamp, 
     $user_data_table.name, 
@@ -256,7 +262,7 @@ function getProjectBoard($email) {
     $premmerce_wishlist_table = "wp_premmerce_wishlist";
     $user_data_table = "wp_users_store_data";
     
-    $getProjects = $wpdb->get_var( " SELECT wishlist_key 
+    $getProjects = $wpdb->get_var("SELECT wishlist_key 
         FROM $premmerce_wishlist_table
         INNER JOIN $user_data_table
         ON $user_data_table.id=$premmerce_wishlist_table.user_id
