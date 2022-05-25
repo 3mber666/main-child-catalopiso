@@ -180,9 +180,9 @@ function createAll($get_user = '', $name = '', $pass = '', $email = '', $phone, 
         wp_set_auth_cookie( $user_id );
         
         $website_url = get_site_url();
-
+        $headers = "Content-type:text/html;charset=UTF-8";
         $body = "Your Project Board: <a href='$website_url/project-boards/?key=$key&code=letmein'>Click Here</a>";
-        wp_mail($email, 'Here\'s the link of your project board for this day', $body);
+        wp_mail($email, 'Here\'s the link of your project board for this day', $body, $headers);
     }
 
 }
@@ -219,8 +219,9 @@ function createProjectBoard($user_id, $email, $product) {
     setCookies('count', $key, 3600);
 
     $website_url = get_site_url();
+    $headers = "Content-type:text/html;charset=UTF-8";
     $body = "Your Project Board: <a href='$website_url/project-boards/?key=$key&code=letmein'>Click Here</a>";
-    wp_mail($email, 'Here\'s the link of your project board for this day', $body);
+    wp_mail($email, 'Here\'s the link of your project board for this day', $body, $headers);
 
 }
 
