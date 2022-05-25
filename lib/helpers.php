@@ -121,16 +121,26 @@ function setUserData($name, $email, $phone, $store_code) {
 
 
 
-function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code, $product = '') {
+function createAll($get_user = '', $name = '', $pass = '', $email = '', $phone, $store_code, $product = '') {
     $username = $get_user;
     $password = $pass;
     $email = $email;
 
     if (username_exists($username) == null && email_exists($email) == false) {
-        $user_id = wp_create_user($username, $password, $email);
-        $user = get_user_by('id', $user_id);
-        $user->add_role('customer');
+        // $user_id = wp_create_user($username, $password, $email);
+        // $user = get_user_by('id', $user_id);
+        // $user->add_role('customer');
         
+
+        $userData = array(
+            'user_login' => $username,
+            'first_name' => $name,
+            'user_pass' => $password,
+            'user_email' => $email,
+            'role' => 'customer'
+        );
+
+        $user_id =  wp_insert_user( $userData );
 
         global $wpdb;
         $user_data_table = $wpdb->prefix . "users_store_data";
@@ -141,7 +151,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
         $key = uniqid();
 
         $wpdb->insert($user_data_table, array(
-            'id' => $user->id,
+            'id' => $user_id,
             'timestamp' => $date,
             'name' => $username, 
             'email' => $email, 
@@ -157,7 +167,7 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
 
         $wpdb->insert($premmerce_wishlist_table, array(
             'id' => NULL,
-            'user_id' => $user->id,
+            'user_id' => $user_id,
             'name' => 'Sample Search '.$date_1,
             'wishlist_key' => $key,
             'products' => $product,
@@ -166,8 +176,8 @@ function createAll($get_user = '', $pass = '', $email = '', $phone, $store_code,
             'default' => 0
         ));
 
-        wp_set_current_user( $user->id );
-        wp_set_auth_cookie( $user->id );
+        wp_set_current_user( $user_id );
+        wp_set_auth_cookie( $user_id );
     }
 
 }
