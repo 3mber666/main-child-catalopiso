@@ -73,7 +73,17 @@ class WP_React_Settings_Rest_Route {
 	    $store_url = sanitize_text_field( $request['test3'] );
         $store_logo = sanitize_text_field( $request['test4'] );
 
-        update_option('password_protected_password', md5( $store_code ));
+        $parseCode =  preg_split("/[\s,]+/", $store_code);
+
+        $input = $parseCode;
+        $data = array();
+        
+        foreach($input as $value){
+            $assign = md5($value);
+            $data[$value] = $assign;
+        }
+        
+        update_option('password_protected_password', $data);
 
         setStore($store_name, $store_code, $store_url, $store_logo);
         return rest_ensure_response( 'success' );

@@ -294,6 +294,7 @@ function getProjectBoard($email) {
 
 function setStore($name, $code, $url, $logo) {
     global $wpdb;
+
     $wpdb->insert('wp_store_codes', array(
         'store_name' => $name,
         'store_code' => $code,

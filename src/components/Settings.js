@@ -336,7 +336,7 @@ handleUsersData = (data, e) => {
                         for="code"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
-                        Code
+                        Code (Note: for multi-password just add ",")
                       </label>
                       <input
                         value={code}
@@ -344,7 +344,7 @@ handleUsersData = (data, e) => {
                         type="text"
                         name="code"
                         id="code"
-                        placeholder="Enter Password"
+                        placeholder="Example: Password1, Password2, Password3, Password4"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         required
                       />
@@ -406,7 +406,6 @@ handleUsersData = (data, e) => {
                           <div>
                             <dt class="sr-only">Category</dt>
                             <dd class="group-hover:text-blue-200">
-                              Code:{" "}
                               <span class="px-1 py-0.5 font-semibold text-sm bg-white text-slate-700 dark:bg-slate-700 dark:text-white rounded-md shadow-sm ring-1 ring-slate-900/5 border-indigo-500 dark:border-sky-500 border-2 border-solid">
                                 {e.store_code}
                               </span>
